@@ -1,6 +1,4 @@
 import {
-    fetchTasksWorkerSaga,
-    removeTaskWorkerSaga,
     tasksReducer
 } from '../features/TodolistsList/tasks-reducer';
 import {todolistsReducer} from '../features/TodolistsList/todolists-reducer';
@@ -10,6 +8,7 @@ import {appReducer, initializeAppWorkerSaga} from './app-reducer'
 import {authReducer} from '../features/Login/auth-reducer'
 import createSagaMiddleware from 'redux-saga'
 import {takeEvery} from 'redux-saga/effects'
+import {fetchTasksWorkerSaga, removeTaskWorkerSaga} from "../features/TodolistsList/tasks-sagas";
 
 // объединяя reducer-ы с помощью combineReducers,
 // мы задаём структуру нашего единственного объекта-состояния

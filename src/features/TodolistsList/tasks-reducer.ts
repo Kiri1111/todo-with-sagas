@@ -12,13 +12,8 @@ import {
 } from '../../api/todolists-api'
 import {Dispatch} from 'redux'
 import {AppRootStateType} from '../../app/store'
-import {
-    SetAppErrorActionType,
-    setAppStatusAC,
-    SetAppStatusActionType
-} from '../../app/app-reducer'
+import {SetAppErrorActionType, setAppStatusAC, SetAppStatusActionType} from '../../app/app-reducer'
 import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils'
-import {put, call} from "redux-saga/effects";
 
 const initialState: TasksStateType = {}
 
@@ -71,28 +66,6 @@ export const setTasksAC = (tasks: Array<TaskType>, todolistId: string) =>
     ({type: 'SET-TASKS', tasks, todolistId} as const)
 
 // sagas
-
-export function* fetchTasksWorkerSaga(action: ReturnType<typeof fetchTasks>) {
-    yield put(setAppStatusAC('loading'))
-    const res = yield call(todolistsAPI.getTasks, action.todolistId)
-
-    const tasks = res.data.items
-    yield put(setTasksAC(tasks, action.todolistId))
-    yield put(setAppStatusAC('succeeded'))
-}
-
-export const fetchTasks = (todolistId: string) => ({type: 'TASKS/FETCH-TASKS', todolistId})
-
-export function* removeTaskWorkerSaga(action: ReturnType<typeof removeTask>) {
-    const res = yield call(todolistsAPI.deleteTask, action.todolistId, action.taskId)
-    yield put(removeTaskAC(action.taskId, action.todolistId))
-}
-
-export const removeTask = (taskId: string, todolistId: string) => ({
-    type: 'TASKS/REMOVE-TASKS',
-    taskId,
-    todolistId
-})
 
 
 // thunks
