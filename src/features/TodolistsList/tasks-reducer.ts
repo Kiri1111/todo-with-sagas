@@ -72,7 +72,7 @@ export const setTasksAC = (tasks: Array<TaskType>, todolistId: string) =>
 
 // sagas
 
-export function* fetchTasksWorkerSaga(action: any) {
+export function* fetchTasksWorkerSaga(action: ReturnType<typeof fetchTasks>) {
     yield put(setAppStatusAC('loading'))
     const res = yield call(todolistsAPI.getTasks, action.todolistId)
 
@@ -82,6 +82,18 @@ export function* fetchTasksWorkerSaga(action: any) {
 }
 
 export const fetchTasks = (todolistId: string) => ({type: 'TASKS/FETCH-TASKS', todolistId})
+
+export function* removeTaskWorkerSaga(action: ReturnType<typeof removeTask>) {
+    const res = yield call(todolistsAPI.deleteTask, action.todolistId, action.taskId)
+    yield put(removeTaskAC(action.taskId, action.todolistId))
+}
+
+export const removeTask = (taskId: string, todolistId: string) => ({
+    type: 'TASKS/REMOVE-TASKS',
+    taskId,
+    todolistId
+})
+
 
 // thunks
 // export const fetchTasksTC = (todolistId: string) => (dispatch: Dispatch<ActionsType | SetAppStatusActionType>) => {
@@ -93,13 +105,13 @@ export const fetchTasks = (todolistId: string) => ({type: 'TASKS/FETCH-TASKS', t
 //             dispatch(setAppStatusAC('succeeded'))
 //         })
 // }
-export const removeTaskTC = (taskId: string, todolistId: string) => (dispatch: Dispatch<ActionsType>) => {
-    todolistsAPI.deleteTask(todolistId, taskId)
-        .then(res => {
-            const action = removeTaskAC(taskId, todolistId)
-            dispatch(action)
-        })
-}
+// export const removeTaskTC = (taskId: string, todolistId: string) => (dispatch: Dispatch<ActionsType>) => {
+//     todolistsAPI.deleteTask(todolistId, taskId)
+//         .then(res => {
+//             const action = removeTaskAC(taskId, todolistId)
+//             dispatch(action)
+//         })
+// }
 export const addTaskTC = (title: string, todolistId: string) => (dispatch: Dispatch<ActionsType | SetAppErrorActionType | SetAppStatusActionType>) => {
     dispatch(setAppStatusAC('loading'))
     todolistsAPI.createTask(todolistId, title)
