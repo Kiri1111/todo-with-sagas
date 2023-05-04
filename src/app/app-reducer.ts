@@ -1,7 +1,3 @@
-import {authAPI} from '../api/todolists-api'
-import {setIsLoggedInAC} from '../features/Login/auth-reducer'
-import {put, call} from 'redux-saga/effects'
-
 const initialState: InitialStateType = {
     status: 'idle',
     error: null,
@@ -14,7 +10,7 @@ export const appReducer = (state: InitialStateType = initialState, action: Actio
             return {...state, status: action.status}
         case 'APP/SET-ERROR':
             return {...state, error: action.error}
-        case 'APP/SET-IS-INITIALIED':
+        case 'APP/SET-IS-INITIALIZED':
             return {...state, isInitialized: action.value}
         default:
             return {...state}
@@ -37,20 +33,9 @@ export const setAppStatusAC = (status: RequestStatusType) => ({
     status
 } as const)
 export const setAppInitializedAC = (value: boolean) => ({
-    type: 'APP/SET-IS-INITIALIED',
+    type: 'APP/SET-IS-INITIALIZED',
     value
 } as const)
-
-export function* initializeAppWorkerSaga() {
-    const res = yield call(authAPI.me)
-    if (res.data.resultCode === 0) {
-        yield put(setIsLoggedInAC(true));
-    } else {
-    }
-    yield put(setAppInitializedAC(true));
-}
-
-export const initializeApp = () => ({type: 'APP/INITIALIZE-APP'})
 
 // export const initializeAppTC = () => async (dispatch: Dispatch) => {
 //     const res = await authAPI.me()

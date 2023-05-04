@@ -1,4 +1,4 @@
-import {call, put} from "redux-saga/effects";
+import {call, put, takeEvery} from "redux-saga/effects";
 import {setAppStatusAC} from "../../app/app-reducer";
 import {todolistsAPI} from "../../api/todolists-api";
 import {removeTaskAC, setTasksAC} from "./tasks-reducer";
@@ -24,3 +24,8 @@ export const removeTask = (taskId: string, todolistId: string) => ({
     taskId,
     todolistId
 })
+
+export function* tasksWatcherSaga() {
+    yield takeEvery('TASKS/FETCH-TASKS', fetchTasksWorkerSaga)
+    yield takeEvery('TASKS/REMOVE-TASKS', removeTaskWorkerSaga)
+}
