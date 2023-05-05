@@ -6,9 +6,7 @@ import {removeTaskAC, setTasksAC} from "./tasks-reducer";
 export function* fetchTasksWorkerSaga(action: ReturnType<typeof fetchTasks>) {
     yield put(setAppStatusAC('loading'))
     const res = yield call(todolistsAPI.getTasks, action.todolistId)
-
-    const tasks = res.data.items
-    yield put(setTasksAC(tasks, action.todolistId))
+    yield put(setTasksAC(res.data.items, action.todolistId))
     yield put(setAppStatusAC('succeeded'))
 }
 

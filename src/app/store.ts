@@ -8,7 +8,8 @@ import {appReducer} from './app-reducer'
 import {authReducer} from '../features/Login/auth-reducer'
 import createSagaMiddleware from 'redux-saga'
 import {tasksWatcherSaga} from "../features/TodolistsList/tasks-sagas";
-import {appWatcherSaga} from "./app-sagas";
+import {appWatcherSaga, initializeAppWorkerSaga} from "./app-sagas";
+import {takeEvery} from "redux-saga/effects";
 
 // объединяя reducer-ы с помощью combineReducers,
 // мы задаём структуру нашего единственного объекта-состояния
@@ -22,15 +23,15 @@ const rootReducer = combineReducers({
 const sagaMiddleware = createSagaMiddleware()
 
 // непосредственно создаём store
-export const store = createStore(rootReducer, applyMiddleware(thunkMiddleware, sagaMiddleware));
 // определить автоматически тип всего объекта состояния
 export type AppRootStateType = ReturnType<typeof rootReducer>
+export const store = createStore(rootReducer, applyMiddleware(thunkMiddleware, sagaMiddleware));
 
 
 sagaMiddleware.run(rootWatcher)
 
 function* rootWatcher() {
-    yield appWatcherSaga()
+    yield takeEvery('APP/INITIALIZE-APP', initializeAppWorkerSaga)
     yield tasksWatcherSaga()
 }
 
