@@ -2,6 +2,7 @@ import {call, put, takeEvery} from "redux-saga/effects";
 import {setAppStatusAC} from "../../app/app-reducer";
 import {todolistsAPI} from "../../api/todolists-api";
 import {addTaskAC, removeTaskAC, setTasksAC} from "./tasks-reducer";
+import {handleServerAppErrorSaga, handleServerNetworkErrorSaga} from "../../utils/error-utils";
 
 export function* fetchTasksWorkerSaga(action: ReturnType<typeof fetchTasks>) {
     yield put(setAppStatusAC('loading'))
@@ -31,10 +32,10 @@ export function* addTaskWorkerSaga(action: ReturnType<typeof addTask>) {
             yield put(addTaskAC(res.data.data.item))
             yield put(setAppStatusAC('succeeded'))
         } else {
-            // handleServerAppError(res.data, dispatch);
+            return handleServerAppErrorSaga(res.data);
         }
-    } catch {
-        // handleServerNetworkError(error, dispatch)
+    } catch (error) {
+        return handleServerNetworkErrorSaga(error)
     }
 }
 
