@@ -15,6 +15,6 @@ export function* initializeAppWorkerSaga() {
 export const initializeApp = () => ({type: 'APP/INITIALIZE-APP'})
 
 export function* appWatcherSaga() {
-    // yield takeEvery('APP/INITIALIZE-APP', initializeAppWorkerSaga)
+    yield takeEvery('APP/INITIALIZE-APP', initializeAppWorkerSaga)
 
 }
