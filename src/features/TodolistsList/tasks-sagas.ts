@@ -32,10 +32,10 @@ export function* addTaskWorkerSaga(action: ReturnType<typeof addTask>) {
             yield put(addTaskAC(res.data.data.item))
             yield put(setAppStatusAC('succeeded'))
         } else {
-            return handleServerAppErrorSaga(res.data);
+            yield handleServerAppErrorSaga(res.data);
         }
     } catch (error) {
-        return handleServerNetworkErrorSaga(error)
+        yield handleServerNetworkErrorSaga(error)
     }
 }
 
